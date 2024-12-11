@@ -20,8 +20,11 @@ const (
 	API = "/api"
 	// APIBooks represents the group of book management API.
 	APIBooks = API + "/books"
+	APITest  = API + "/test"
 	// APIBooksID represents the API to get book data using id.
 	APIBooksID = APIBooks + "/:id"
+	// APIBooksTD represents the API to get book data using test_data.
+	APIBooksTD = APITest + "/td/:test_data"
 	// APICategories represents the group of category management API.
 	APICategories = API + "/categories"
 	// APIFormats represents the group of format management API.

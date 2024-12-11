@@ -12,6 +12,7 @@ import (
 
 // BookService is a service for managing books.
 type BookService interface {
+	FindByTD(testData string) (*model.Book, error)
 	FindByID(id string) (*model.Book, error)
 	FindAllBooks() (*[]model.Book, error)
 	FindAllBooksByPage(page string, size string) (*model.Page, error)
@@ -41,6 +42,22 @@ func (b *bookService) FindByID(id string) (*model.Book, error) {
 	var result *model.Book
 	var err error
 	if result, err = book.FindByID(rep, util.ConvertToUint(id)).Take(); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (b *bookService) FindByTD(testData string) (*model.Book, error) {
+	// 暂时不需要判断是否为数字
+	//if !util.IsNumeric(id) {
+	//	return nil, errors.New("failed to fetch data")
+	//}
+
+	rep := b.container.GetRepository()
+	book := model.Book{}
+	var result *model.Book
+	var err error
+	if result, err = book.FindByTD(rep, testData).Take(); err != nil {
 		return nil, err
 	}
 	return result, nil

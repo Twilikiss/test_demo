@@ -58,6 +58,9 @@ func setErrorController(e *echo.Echo, container container.Container) {
 
 func setBookController(e *echo.Echo, container container.Container) {
 	book := controller.NewBookController(container)
+
+	e.GET(config.APIBooksTD, func(c echo.Context) error { return book.GetBookByTD(c) })
+
 	e.GET(config.APIBooksID, func(c echo.Context) error { return book.GetBook(c) })
 	e.GET(config.APIBooks, func(c echo.Context) error { return book.GetBookList(c) })
 	e.POST(config.APIBooks, func(c echo.Context) error { return book.CreateBook(c) })

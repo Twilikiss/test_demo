@@ -20,6 +20,7 @@ type Book struct {
 	Category   *Category `json:"category"`
 	FormatID   uint      `json:"formatId"`
 	Format     *Format   `json:"format"`
+	TestData   string    `json:"testData"`
 }
 
 // RecordBook defines struct represents the record of the database.
@@ -31,13 +32,15 @@ type RecordBook struct {
 	CategoryName string
 	FormatID     uint
 	FormatName   string
+	TestData     string
 }
 
 const (
-	selectBook = "select b.id as id, b.title as title, b.isbn as isbn, " +
+	selectBook = "select b.id as id, b.title as title, b.isbn as isbn,b.test_data as test_data, " +
 		"c.id as category_id, c.name as category_name, f.id as format_id, f.name as format_name " +
 		"from book b inner join category_master c on c.id = b.category_id inner join format_master f on f.id = b.format_id "
 	findByID    = " where b.id = ?"
+	findByTD    = " where b.test_data = ?"
 	findByTitle = " where title like ? "
 )
 
@@ -57,6 +60,14 @@ func (b *Book) FindByID(rep repository.Repository, id uint) optional.Option[*Boo
 	args := []interface{}{id}
 
 	createRaw(rep, selectBook+findByID, "", "", args).Scan(&rec)
+	return convertToBook(&rec)
+}
+
+func (b *Book) FindByTD(rep repository.Repository, testData string) optional.Option[*Book] {
+	var rec RecordBook
+	args := []interface{}{testData}
+
+	createRaw(rep, selectBook+findByTD, "", "", args).Scan(&rec)
 	return convertToBook(&rec)
 }
 

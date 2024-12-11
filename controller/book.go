@@ -12,6 +12,7 @@ import (
 // BookController is a controller for managing books.
 type BookController interface {
 	GetBook(c echo.Context) error
+	GetBookByTD(c echo.Context) error
 	GetBookList(c echo.Context) error
 	CreateBook(c echo.Context) error
 	UpdateBook(c echo.Context) error
@@ -41,6 +42,14 @@ func NewBookController(container container.Container) BookController {
 // @Router /books/{book_id} [get]
 func (controller *bookController) GetBook(c echo.Context) error {
 	book, err := controller.service.FindByID(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+	return c.JSON(http.StatusOK, book)
+}
+
+func (controller *bookController) GetBookByTD(c echo.Context) error {
+	book, err := controller.service.FindByTD(c.Param("test_data"))
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err.Error())
 	}
